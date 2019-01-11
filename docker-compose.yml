@@ -1,5 +1,9 @@
 version: "3"
 services:
+  controlcenter:
+    image: control-center
+    ports:
+      - '80:8001'
   dummy:
     image: dummy-service
     restart: unless-stopped
@@ -11,5 +15,12 @@ services:
     image: "redis:alpine"
     networks:
       - alertnet
+  kafka:
+    image: "spotify/kafka"
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    environment:
+      - ADVERTISED_PORT=9092
 networks:
   alertnet:

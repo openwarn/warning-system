@@ -10,6 +10,6 @@ Dieses Projekt ist Teil der Masterarbeit von Alexander Noack (TU Ilmenau; Fachge
 
 ## System starten
 
-```
+```bash
 docker-compose up -d
 ```
