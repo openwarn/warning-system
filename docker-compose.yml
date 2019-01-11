@@ -1,0 +1,15 @@
+version: "3"
+services:
+  dummy:
+    image: dummy-service
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    networks:
+      - alertnet
+  redis:
+    image: "redis:alpine"
+    networks:
+      - alertnet
+networks:
+  alertnet:
