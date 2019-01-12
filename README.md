@@ -13,3 +13,9 @@ Dieses Projekt ist Teil der Masterarbeit von Alexander Noack (TU Ilmenau; Fachge
 ```bash
 docker-compose up -d
 ```
+
+## Konventionen
+
+### Services
+
+* Health-Endpoint (Obligatorisch): /health
