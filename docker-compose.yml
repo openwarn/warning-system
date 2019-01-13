@@ -15,12 +15,29 @@ services:
     image: "redis:alpine"
     networks:
       - alertnet
-  kafka:
-    image: "spotify/kafka"
+  zookeeper:
+    image: confluent/zookeeper
     ports:
       - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    ports:
       - "9092:9092"
     environment:
-      - ADVERTISED_PORT=9092
+      - KAFKA_ADVERTISED_HOST_NAME=localhost
+      - KAFKA_ADVERTISED_PORT=9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_DELETE_TOPIC_ENABLE=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  kafka_manager:
+    image: hlebalbau/kafka-manager:stable
+    ports:
+      - "9000:9000"
+    environment:
+      - ZK_HOSTS=zookeeper:2181
+      - APPLICATION_SECRET=random-secret
+      - KM_ARGS=-Djava.net.preferIPv4Stack=true
+    command: -Dpidfile.path=/dev/nul
 networks:
   alertnet:

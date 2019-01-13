@@ -19,3 +19,7 @@ docker-compose up -d
 ### Services
 
 * Health-Endpoint (Obligatorisch): /health
+
+## TODO
+
+* () Gateway hinzufügen
