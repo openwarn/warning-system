@@ -11,16 +11,24 @@ services:
       - "5000:5000"
     networks:
       - alertnet
+  warningdistributionservice:
+    image: warning-distribution-service
+    restart: unless-stopped
+    networks:
+      - alertnet
   redis:
     image: "redis:alpine"
+    restart: unless-stopped
     networks:
       - alertnet
   zookeeper:
     image: confluent/zookeeper
+    restart: unless-stopped
     ports:
       - "2181:2181"
   kafka:
     image: wurstmeister/kafka
+    restart: unless-stopped
     ports:
       - "9092:9092"
     environment:
@@ -32,6 +40,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   kafka_manager:
     image: hlebalbau/kafka-manager:stable
+    restart: unless-stopped
     ports:
       - "9000:9000"
     environment:
