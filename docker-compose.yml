@@ -12,6 +12,11 @@ services:
   warningdistributionservice:
     image: warning-distribution-service
     restart: unless-stopped
+    ports:
+      - "9101:5000"
+  webdisseminator:
+    image: web-disseminator
+    restart: unless-stopped
   redis:
     image: "redis:alpine"
     restart: unless-stopped
