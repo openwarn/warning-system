@@ -2,6 +2,7 @@ version: "3"
 services:
   controlcenter:
     image: control-center
+    restart: unless-stopped
     ports:
       - '80:8001'
   dummy:
