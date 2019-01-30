@@ -24,10 +24,16 @@ services:
     image: warning-distribution-service
     restart: unless-stopped
     ports:
-      - "9101:5000"
+      - "9101:9101"
+    environment: 
+      KAFKA_HOST: kafka:9092          
   webdisseminator:
     image: web-disseminator
     restart: unless-stopped
+    ports:
+      - "9201:9201"       
+    environment: 
+      KAFKA_HOST: kafka:9092    
   redis:
     image: "redis:alpine"
     restart: unless-stopped
@@ -47,7 +53,7 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: birds:1:1
+      KAFKA_CREATE_TOPICS: birds:1:1, alert:1:1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   kafka_manager:
