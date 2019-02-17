@@ -4,22 +4,19 @@ services:
     image: control-center
     restart: unless-stopped
     ports:
-      - '80:8001'
-  dummy:
-    image: dummy-service
-    restart: unless-stopped
-    ports:
-      - "5000:5000"
-    depends_on:
-      - redis
-      - kafka      
-  nodedummy:
-    image: node-dummy-service
+      - '80:8001'  
+  capfeedfetcherservice:
+    image: cap-feed-fetcher-service
     restart: unless-stopped
     environment: 
       KAFKA_HOST: kafka:9092
+      WARNING_DISTRIBUTION_URL: http://warningdistributionservice:9101/api/v1/alerts
+      PULL_INTERVAL: 20000
     ports:
-      - "3000:3000"      
+      - "9301:9301"
+  redis:
+    image: "redis:alpine"
+    restart: unless-stopped      
   warningdistributionservice:
     image: warning-distribution-service
     restart: unless-stopped
@@ -34,9 +31,6 @@ services:
       - "9201:9201"       
     environment: 
       KAFKA_HOST: kafka:9092    
-  redis:
-    image: "redis:alpine"
-    restart: unless-stopped
   zookeeper:
     image: confluent/zookeeper
     restart: unless-stopped
@@ -56,15 +50,3 @@ services:
       KAFKA_CREATE_TOPICS: birds:1:1, alert:1:1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  kafka_manager:
-    image: hlebalbau/kafka-manager:stable
-    depends_on:
-      - kafka
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
-    environment:
-      ZK_HOSTS: zookeeper:2181
-      APPLICATION_SECRET: random-secret
-      KM_ARGS: -Djava.net.preferIPv4Stack=true
-    command: -Dpidfile.path=/dev/nul
