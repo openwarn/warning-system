@@ -5,15 +5,28 @@ services:
     restart: unless-stopped
     ports:
       - '80:8001'  
-  capfeedfetcherservice:
+  dwdfeed:
     image: cap-feed-fetcher-service
     restart: unless-stopped
     environment: 
+      FEED_URL: https://www.dwd.de/DWD/warnungen/cap-feed/de/atom.xml
       KAFKA_HOST: kafka:9092
       WARNING_DISTRIBUTION_URL: http://warningdistributionservice:9101/api/v1/alerts
-      PULL_INTERVAL: 20000
+      PULL_INTERVAL: 5000
+      REDIS_HOST: redis
     ports:
       - "9301:9301"
+  inatewsfeed:
+    image: cap-feed-fetcher-service
+    restart: unless-stopped
+    environment: 
+      FEED_URL: https://inatews.bmkg.go.id/rss/capatomlast40event.xml
+      KAFKA_HOST: kafka:9092
+      WARNING_DISTRIBUTION_URL: http://warningdistributionservice:9101/api/v1/alerts
+      PULL_INTERVAL: 5000
+      REDIS_HOST: redis
+    ports:
+      - "9302:9301"      
   redis:
     image: "redis:alpine"
     restart: unless-stopped      
